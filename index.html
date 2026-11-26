@@ -4,26 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#F4F6F9">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2214%22%20fill=%22%23E7F0FF%22/%3E%3Ccircle%20cx=%2232%22%20cy=%2225%22%20r=%229%22%20fill=%22%232F66C8%22/%3E%3Crect%20x=%2228%22%20y=%2229%22%20width=%228%22%20height=%2220%22%20rx=%224%22%20fill=%22%232F66C8%22/%3E%3Crect%20x=%2217%22%20y=%2246%22%20width=%2230%22%20height=%227%22%20rx=%223.5%22%20fill=%22%232F66C8%22/%3E%3C/svg%3E">
-<title>미니게임 모음</title>
-<meta name="description" content="왕전초 친구들과 가족을 위한 미니게임 4가지를 한곳에서 골라 바로 시작해 보세요.">
+<meta name="theme-color" content="#FFF7EC">
+<meta name="description" content="왕전초 친구들을 위한 창의수학 놀이터 — 연산왕, 길찾기왕, 눈치왕, 사과게임왕, 한붓그리기왕을 한곳에서 골라 바로 시작하고, 우리 반 기록도 확인해요.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2216%22%20fill=%22%23FFF1D6%22/%3E%3Ctext%20x=%2232%22%20y=%2244%22%20font-size=%2230%22%20text-anchor=%22middle%22%3E%F0%9F%A7%AE%3C/text%3E%3C/svg%3E">
+<title>♡왕전초 창의수학 놀이터!♡</title>
 <style>
 :root{
-  --bg:#F4F6F9;
+  --bg:#FFF8EF;
   --card:#FFFFFF;
-  --line:#E5E9F0;
-  --ink:#1F2937;
-  --muted:#5F6B7C;
-  --shadow:0 1px 2px rgba(23,32,50,.04), 0 6px 18px rgba(23,32,50,.05);
+  --ink:#2A2438;
+  --muted:#6E6880;
+  --line:#F0E6DA;
+  --shadow:0 1px 2px rgba(80,55,20,.05), 0 10px 24px rgba(80,55,20,.07);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;
-  min-height:100%;
+  min-height:100vh;
   background:
-    radial-gradient(120% 60% at 50% -10%, #FFFFFF 0%, rgba(255,255,255,0) 62%),
+    radial-gradient(120% 55% at 50% -12%, #FFFFFF 0%, rgba(255,255,255,0) 60%),
+    radial-gradient(70% 40% at 110% 10%, #FFE9F1 0%, rgba(255,233,241,0) 70%),
+    radial-gradient(70% 40% at -10% 18%, #E7F4FF 0%, rgba(231,244,255,0) 70%),
     var(--bg);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
@@ -34,25 +36,40 @@ body{
 }
 .wrap{
   width:100%;
-  max-width:840px;
+  max-width:820px;
   margin:0 auto;
-  padding:calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(26px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  padding:calc(22px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(26px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
 }
-.hero{text-align:center;padding:4px 2px 20px}
+.hero{text-align:center;padding:2px 2px 16px}
+.hero .kicker{
+  display:inline-block;
+  margin:0 0 8px;
+  padding:4px 12px;
+  border-radius:999px;
+  background:#FFFFFF;
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:800;
+  color:#B4791B;
+  letter-spacing:-.01em;
+  box-shadow:var(--shadow);
+}
 h1{
   margin:0;
-  font-size:clamp(23px,6.4vw,30px);
-  font-weight:800;
-  letter-spacing:-.03em;
-  line-height:1.25;
+  font-size:clamp(23px,6.6vw,32px);
+  font-weight:900;
+  letter-spacing:-.035em;
+  line-height:1.22;
+  color:#3A2C4E;
 }
+h1 .hh{color:#F0618F}
 .sub{
-  margin:8px 0 0;
-  font-size:clamp(12.5px,3.4vw,14px);
+  margin:9px 0 0;
+  font-size:clamp(12.5px,3.5vw,14px);
+  font-weight:700;
   color:var(--muted);
   letter-spacing:-.01em;
   word-break:keep-all;
-  overflow-wrap:break-word;
 }
 .grid{
   list-style:none;
@@ -64,51 +81,39 @@ h1{
 }
 .grid > li{display:flex;min-width:0}
 .card{
-  --chip:#EDF1F7;
-  --accent:#47536A;
+  --chip:#EEF2F8;
+  --accent:#4A5670;
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   gap:13px;
   width:100%;
   height:100%;
   padding:15px 15px 14px;
   background:var(--card);
   border:1px solid var(--line);
-  border-radius:18px;
+  border-radius:20px;
   box-shadow:var(--shadow);
   text-decoration:none;
   color:inherit;
   transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
 }
-.card:hover{
-  border-color:#D6DEEA;
-  box-shadow:0 2px 4px rgba(23,32,50,.05), 0 12px 26px rgba(23,32,50,.09);
-  transform:translateY(-2px);
-}
+.card:hover{border-color:#E7D9C6;box-shadow:0 3px 6px rgba(80,55,20,.06), 0 16px 30px rgba(80,55,20,.11);transform:translateY(-2px)}
 .card:active{transform:scale(.985)}
 .card:focus-visible{outline:3px solid #9DB4D6;outline-offset:3px}
 .icon{
   flex:0 0 auto;
-  width:50px;
-  height:50px;
-  display:grid;
-  place-items:center;
-  border-radius:15px;
+  width:54px;height:54px;
+  display:grid;place-items:center;
+  border-radius:16px;
   background:var(--chip);
-  font-size:25px;
-  line-height:1;
+  font-size:27px;line-height:1;
 }
-.body{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-}
+.body{flex:1 1 auto;min-width:0}
 .name{
-  margin:1px 0 0;
+  margin:0;
   font-size:16.5px;
-  font-weight:800;
-  letter-spacing:-.025em;
+  font-weight:900;
+  letter-spacing:-.03em;
   line-height:1.3;
   word-break:keep-all;
   overflow-wrap:break-word;
@@ -117,50 +122,67 @@ h1{
   margin:3px 0 0;
   font-size:12.8px;
   line-height:1.45;
+  font-weight:700;
   color:var(--muted);
   letter-spacing:-.01em;
   word-break:keep-all;
-  overflow-wrap:break-word;
 }
 .badge{
-  align-self:flex-start;
-  margin-top:9px;
   display:inline-flex;
   align-items:center;
   gap:4px;
-  padding:3px 9px 3px 10px;
+  margin-top:9px;
+  padding:3px 10px;
   border-radius:999px;
   background:var(--chip);
   color:var(--accent);
   font-size:11.5px;
-  font-weight:800;
+  font-weight:900;
   letter-spacing:-.01em;
   white-space:nowrap;
 }
-.badge .arrow{font-weight:700}
-.c1{--chip:#E9EDF4;--accent:#44506A}
-.c2{--chip:#E7F0FF;--accent:#2F66C8}
-.c3{--chip:#FFF2DA;--accent:#A96E16}
-.c4{--chip:#FFE8F0;--accent:#BB446F}
+.c1{--chip:#FFE9E1;--accent:#C4451F}
+.c2{--chip:#E3F0FF;--accent:#2361B6}
+.c3{--chip:#FFE6F1;--accent:#B23069}
+.c4{--chip:#E9FBE8;--accent:#1F8A3B}
+.c5{--chip:#F0EAFF;--accent:#5C3AC0}
+.records{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:16px 0 0;
+  padding:15px 16px;
+  background:linear-gradient(135deg,#FFF4D6 0%,#FFE8C2 100%);
+  border:1px solid #F3DCA8;
+  border-radius:20px;
+  text-decoration:none;
+  color:#6A4A08;
+  box-shadow:0 1px 2px rgba(120,80,0,.06), 0 10px 22px rgba(170,120,20,.10);
+}
+.records:active{transform:scale(.99)}
+.records .ricon{font-size:26px;line-height:1}
+.records b{display:block;font-size:15.5px;font-weight:900;letter-spacing:-.025em;color:#5C3F05}
+.records span.rt{display:block;margin-top:2px;font-size:12.3px;font-weight:800;color:#8A6A22;letter-spacing:-.01em}
+.records .arrow{margin-left:auto;font-size:19px;font-weight:900;color:#B08220}
 .foot{
-  margin:22px 0 0;
+  margin:20px 0 0;
   text-align:center;
   font-size:11.5px;
-  color:#8A94A3;
+  font-weight:700;
+  color:#93897F;
   letter-spacing:-.01em;
   word-break:keep-all;
 }
-@media (min-width:600px){
+@media (min-width:640px){
   .wrap{padding-left:calc(22px + env(safe-area-inset-left));padding-right:calc(22px + env(safe-area-inset-right))}
-  .hero{padding-bottom:24px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:14px}
-  .card{align-items:center;padding:17px 17px 16px;gap:15px}
-  .icon{width:54px;height:54px;font-size:27px;border-radius:16px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .card{align-items:flex-start;padding:17px}
+  .icon{width:58px;height:58px;font-size:29px}
   .name{font-size:17.5px}
   .desc{font-size:13.2px}
 }
 @media (prefers-reduced-motion:reduce){
-  .card{transition:none}
+  .card,.records{transition:none}
   .card:hover{transform:none}
 }
 </style>
@@ -168,52 +190,74 @@ h1{
 <body>
 <main class="wrap">
   <header class="hero">
-    <h1>미니게임 모음</h1>
-    <p class="sub">하고 싶은 게임을 눌러 바로 시작해 보세요!</p>
+    <p class="kicker">🧮 왕전초 친구들 모두 모여라</p>
+    <h1>♡왕전초 창의수학 놀이터!♡</h1>
+    <p class="sub">하고 싶은 놀이를 골라 바로 시작해요.<br>한 판이 끝나면 학년·번호를 적어 기록을 남길 수 있어요!</p>
   </header>
+
   <ul class="grid">
     <li>
-      <a class="card c1" href="https://chohanui2-home.github.io/one-stroke/">
-        <span class="icon" aria-hidden="true">✏️</span>
-        <span class="body">
-          <h2 class="name">한붓그리기</h2>
-          <span class="desc">점을 이어 모든 선을 중복 없이 한 번에 다 잇기</span>
-          <span class="badge">바로 시작 <span class="arrow" aria-hidden="true">→</span></span>
-        </span>
-      </a>
-    </li>
-    <li>
-      <a class="card c2" href="https://chohanui2-home.github.io/wangjeon-math/">
+      <a class="card c1" href="https://chohanui2-home.github.io/wangjeon-math/">
         <span class="icon" aria-hidden="true">🧮</span>
         <span class="body">
           <h2 class="name">♡왕전초 연산왕!♡</h2>
-          <span class="desc">1~6단계 사칙연산(+ − × ÷) 5문제 풀기</span>
-          <span class="badge">바로 시작 <span class="arrow" aria-hidden="true">→</span></span>
+          <span class="desc">빈칸에 알맞은 연산 기호를 넣어 식을 완성해요 · 1~6단계</span>
+          <span class="badge">바로 시작 →</span>
         </span>
       </a>
     </li>
     <li>
-      <a class="card c3" href="https://chohanui2-home.github.io/wangjeon-timer/">
-        <span class="icon" aria-hidden="true">⏱️</span>
+      <a class="card c2" href="https://chohanui2-home.github.io/wangjeon-connect/">
+        <span class="icon" aria-hidden="true">🌈</span>
         <span class="body">
-          <h2 class="name">♡왕전초 타이머왕!♡</h2>
-          <span class="desc">눈짐작으로 목표 초에 딱 맞춰 멈추기</span>
-          <span class="badge">바로 시작 <span class="arrow" aria-hidden="true">→</span></span>
+          <h2 class="name">♡왕전초 길찾기왕!♡</h2>
+          <span class="desc">같은 색 두 점을 잇고 모든 칸을 채워요 · 1~5단계</span>
+          <span class="badge">바로 시작 →</span>
         </span>
       </a>
     </li>
     <li>
-      <a class="card c4" href="https://chohanui2-home.github.io/wangjeon-nunchi/">
+      <a class="card c3" href="https://chohanui2-home.github.io/wangjeon-nunchi/">
         <span class="icon" aria-hidden="true">🎨</span>
         <span class="body">
           <h2 class="name">♡왕전초 눈치왕!♡</h2>
-          <span class="desc">적힌 글자·칠해진 색깔 헷갈리지 않고 고르기</span>
-          <span class="badge">바로 시작 <span class="arrow" aria-hidden="true">→</span></span>
+          <span class="desc">글자와 색깔이 헷갈려도 척척 골라요 · 1~6단계</span>
+          <span class="badge">바로 시작 →</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a class="card c4" href="https://chohanui2-home.github.io/apple-game/">
+        <span class="icon" aria-hidden="true">🍎</span>
+        <span class="body">
+          <h2 class="name">♡왕전초 사과게임왕!♡</h2>
+          <span class="desc">드래그해서 합이 10이 되게 사과를 터뜨려요 · 120초</span>
+          <span class="badge">바로 시작 →</span>
+        </span>
+      </a>
+    </li>
+    <li>
+      <a class="card c5" href="https://chohanui2-home.github.io/one-stroke/">
+        <span class="icon" aria-hidden="true">✏️</span>
+        <span class="body">
+          <h2 class="name">♡왕전초 한붓그리기왕!♡</h2>
+          <span class="desc">같은 선을 두 번 지나지 않고 한 번에 다 이어요 · 1~5단계</span>
+          <span class="badge">바로 시작 →</span>
         </span>
       </a>
     </li>
   </ul>
-  <p class="foot">총 4가지 · 스마트폰과 태블릿에서 모두 즐길 수 있어요</p>
+
+  <a class="records" href="https://chohanui2-home.github.io/games/records.html">
+    <span class="ricon" aria-hidden="true">🏆</span>
+    <span>
+      <b>우리 반 기록 보기</b>
+      <span class="rt">게임별 순위 · 참여한 친구들 · 엑셀 저장</span>
+    </span>
+    <span class="arrow" aria-hidden="true">→</span>
+  </a>
+
+  <p class="foot">놀이 5가지 · 스마트폰과 태블릿에서 모두 즐길 수 있어요</p>
 </main>
 </body>
 </html>

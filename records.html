@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F4F7FC">
+<meta name="description" content="♡왕전초 창의수학 놀이터!♡ 게임 기록 — 게임별·학년별 순위, 참여한 친구들, 엑셀(CSV) 저장, 선생님용 기록 정리.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2064%2064%22%3E%3Crect%20width=%2264%22%20height=%2264%22%20rx=%2216%22%20fill=%22%23FFF4D6%22/%3E%3Ctext%20x=%2232%22%20y=%2245%22%20font-size=%2230%22%20text-anchor=%22middle%22%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E">
+<title>우리 반 기록장 · ♡왕전초 창의수학 놀이터!♡</title>
+<style>
+:root{
+  --bg:#F4F7FC;
+  --card:#FFFFFF;
+  --ink:#1F2937;
+  --muted:#65707F;
+  --line:#E3E9F2;
+  --blue:#2563EB;
+  --ok:#0F9D58;
+  --bad:#DC2626;
+  --shadow:0 1px 2px rgba(20,35,60,.04), 0 10px 24px rgba(20,35,60,.06);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(120% 50% at 50% -10%, #FFFFFF 0%, rgba(255,255,255,0) 60%), var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{
+  width:100%;max-width:860px;margin:0 auto;
+  padding:calc(18px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
+}
+a{color:var(--blue)}
+.top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.back{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:34px;padding:0 12px;border-radius:10px;background:#fff;border:1px solid var(--line);
+  font-size:12.5px;font-weight:900;color:#42506A;text-decoration:none;letter-spacing:-.01em;box-shadow:var(--shadow);
+}
+h1{margin:0;font-size:clamp(21px,5.6vw,27px);font-weight:900;letter-spacing:-.035em;line-height:1.25}
+.sub{margin:5px 0 0;font-size:12.5px;font-weight:800;color:var(--muted);letter-spacing:-.01em;word-break:keep-all}
+.panel{
+  margin-top:14px;padding:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow);
+}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:3px;flex:1 1 130px;min-width:0}
+.field > span{font-size:10.5px;font-weight:900;color:#7A8494;letter-spacing:-.01em}
+select{
+  width:100%;height:38px;padding:0 8px;border:1.5px solid #D9E1EC;border-radius:11px;background:#fff;
+  font:inherit;font-size:13.5px;font-weight:800;color:#243040;-webkit-appearance:none;appearance:none;
+}
+select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn{
+  height:38px;padding:0 12px;border:1.5px solid #D9E1EC;border-radius:11px;background:#fff;
+  font:inherit;font-size:12.8px;font-weight:900;color:#33415C;letter-spacing:-.01em;cursor:pointer;
+}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 0 #1D4ED8}
+.btn.warn{background:#FFF1F1;border-color:#FFC9C9;color:#B42318}
+.btn[disabled]{opacity:.55;cursor:default}
+.summary{
+  display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;padding-top:10px;border-top:1px dashed #E7EDF6;
+  font-size:12px;font-weight:800;color:var(--muted);
+}
+.summary b{color:#1F2937}
+h2.sec{
+  display:flex;align-items:center;gap:6px;margin:20px 0 8px;font-size:15px;font-weight:900;letter-spacing:-.02em;
+}
+h2.sec .cnt{font-size:11.5px;font-weight:900;color:#8A94A3}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;font-size:12.8px;min-width:340px}
+th,td{padding:8px 9px;text-align:center;border-bottom:1px solid #EFF3F9;white-space:nowrap}
+th{
+  position:sticky;top:0;background:#F7F9FD;color:#5C6878;font-size:11px;font-weight:900;letter-spacing:-.01em;
+}
+tbody tr:last-child td{border-bottom:none}
+td.name{max-width:110px;overflow:hidden;text-overflow:ellipsis}
+td.detail{max-width:190px;overflow:hidden;text-overflow:ellipsis;color:#65707F;font-weight:700;white-space:normal;text-align:left;min-width:120px}
+td.rank{font-weight:900;color:#8A94A3}
+tr.me td.rank{color:#B45309}
+.medal{font-size:14px}
+.empty{padding:22px 12px;text-align:center;font-size:13px;font-weight:800;color:#8A94A3}
+.gamehead{
+  display:flex;align-items:baseline;gap:8px;margin:18px 0 7px;font-size:14px;font-weight:900;letter-spacing:-.02em;
+}
+.gamehead span{font-size:11.5px;font-weight:800;color:#8A94A3}
+.del{
+  width:30px;height:28px;border:1px solid #FFD3D3;border-radius:9px;background:#FFF5F5;color:#B42318;
+  font-size:12px;font-weight:900;cursor:pointer;
+}
+.mask{
+  position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(17,24,39,.45);
+}
+.mask[hidden]{display:none}
+.sheet{
+  width:100%;max-width:330px;background:#fff;border-radius:18px;padding:16px;box-shadow:0 20px 44px rgba(15,23,42,.3);text-align:center;
+}
+.sheet h3{margin:0;font-size:16px;font-weight:900;letter-spacing:-.02em}
+.sheet p{margin:6px 0 0;font-size:12px;font-weight:800;color:var(--muted);word-break:keep-all}
+.pin{
+  width:100%;height:44px;margin-top:10px;border:1.5px solid #D9E1EC;border-radius:12px;background:#fff;
+  text-align:center;font:inherit;font-size:18px;font-weight:900;letter-spacing:.3em;color:#1F2937;
+  -webkit-appearance:none;appearance:none;
+}
+.pin:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.sheet .msg{min-height:16px;margin-top:7px;font-size:11.5px;font-weight:900;color:var(--bad)}
+.sheet .row{display:flex;gap:7px;margin-top:10px}
+.sheet .row .btn{flex:1;height:40px}
+.toast{
+  position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  max-width:calc(100% - 32px);padding:10px 16px;border-radius:999px;background:rgba(24,32,45,.92);color:#fff;
+  font-size:12.5px;font-weight:900;letter-spacing:-.01em;box-shadow:0 10px 24px rgba(15,23,42,.28);z-index:60;
+}
+.toast[hidden]{display:none}
+.foot{margin:22px 0 0;text-align:center;font-size:11.5px;font-weight:700;color:#98A1AE;word-break:keep-all}
+@media (max-width:420px){
+  th,td{padding:7px 7px;font-size:12px}
+  td.detail{display:none}
+  th.detail{display:none}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <a class="back" href="https://chohanui2-home.github.io/games/">← 놀이터</a>
+    <div style="flex:1 1 auto;min-width:0">
+      <h1>🏆 우리 반 기록장</h1>
+      <p class="sub">♡왕전초 창의수학 놀이터!♡ · 게임이 끝나고 남긴 기록이 여기에 모여요</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="filters">
+      <label class="field"><span>게임</span>
+        <select id="fGame">
+          <option value="">전체 게임</option>
+          <option value="math">♡왕전초 연산왕!♡</option>
+          <option value="connect">♡왕전초 길찾기왕!♡</option>
+          <option value="nunchi">♡왕전초 눈치왕!♡</option>
+          <option value="apple">♡왕전초 사과게임왕!♡</option>
+          <option value="one-stroke">♡왕전초 한붓그리기왕!♡</option>
+          <option value="timer">도전!! 타이머왕♡</option>
+        </select>
+      </label>
+      <label class="field"><span>학년</span>
+        <select id="fGrade">
+          <option value="">전체 학년</option>
+          <option value="1">1학년</option>
+          <option value="2">2학년</option>
+          <option value="3">3학년</option>
+          <option value="4">4학년</option>
+          <option value="5">5학년</option>
+          <option value="6">6학년</option>
+        </select>
+      </label>
+      <label class="field"><span>찾기</span>
+        <select id="fSort">
+          <option value="rank">순위 · 점수 높은 순</option>
+          <option value="recent">최근 등록 순</option>
+        </select>
+      </label>
+    </div>
+    <div class="btns" style="margin-top:9px">
+      <button class="btn primary" id="btnReload" type="button">🔄 새로고침</button>
+      <button class="btn" id="btnCsv" type="button">📥 엑셀(CSV) 저장</button>
+      <button class="btn" id="btnTeacher" type="button">🔒 선생님</button>
+      <button class="btn warn" id="btnClear" type="button" hidden>전체 비우기</button>
+    </div>
+    <div class="summary" id="summary">
+      <span>불러오는 중…</span>
+    </div>
+  </section>
+
+  <section id="ranking"></section>
+
+  <h2 class="sec">📋 전체 기록 <span class="cnt" id="allCnt"></span></h2>
+  <div class="tblwrap">
+    <table id="allTable">
+      <thead>
+        <tr>
+          <th>등록</th><th>게임</th><th>학년</th><th>번호</th><th>이름</th><th>점수</th>
+          <th class="detail">기록</th><th class="delcol" hidden></th>
+        </tr>
+      </thead>
+      <tbody id="allBody"><tr><td colspan="8" class="empty">불러오는 중…</td></tr></tbody>
+    </table>
+  </div>
+
+  <p class="foot">이름은 선택 입력이에요 · 잘못 남긴 기록은 선생님 모드에서 한 건씩 지울 수 있어요</p>
+</main>
+
+<div class="mask" id="pinMask" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="선생님 확인">
+    <h3>🔒 선생님 확인</h3>
+    <p>기록을 지우려면 PIN 네 자리를 입력해 주세요.</p>
+    <input class="pin" id="pinInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="••••">
+    <p class="msg" id="pinMsg"></p>
+    <div class="row">
+      <button class="btn" id="pinCancel" type="button">취소</button>
+      <button class="btn primary" id="pinOk" type="button">확인</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var API = 'https://hlqyzstixodeqywgfmvg.supabase.co';
+  var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhscXl6c3RpeG9kZXF5d2dmbXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4MjEwNDcsImV4cCI6MjExMDM5NzA0N30.pgZlwx_9cNMM9CjUag6SBl5k5unOM2SI9f0yn3HA2cQ';
+
+  var GAMES = [
+    { id: 'math', name: '♡왕전초 연산왕!♡', unit: '점', icon: '🧮' },
+    { id: 'connect', name: '♡왕전초 길찾기왕!♡', unit: '문제', icon: '🌈' },
+    { id: 'nunchi', name: '♡왕전초 눈치왕!♡', unit: '점', icon: '🎨' },
+    { id: 'apple', name: '♡왕전초 사과게임왕!♡', unit: '점', icon: '🍎' },
+    { id: 'one-stroke', name: '♡왕전초 한붓그리기왕!♡', unit: '문제', icon: '✏️' },
+    { id: 'timer', name: '도전!! 타이머왕♡', unit: '점', icon: '⏱️' }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var rows = [];
+  var pin = '';
+
+  function gameOf(id) {
+    for (var i = 0; i < GAMES.length; i++) { if (GAMES[i].id === id) { return GAMES[i]; } }
+    return { id: id, name: id, unit: '', icon: '🎮' };
+  }
+  function num(v) { return (typeof v === 'number' && isFinite(v)) ? v : 0; }
+  function fmt(n) { return String(Math.round(num(n))).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function when(ms) {
+    var d = new Date(num(ms));
+    if (isNaN(d.getTime())) { return ''; }
+    return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function toast(text) {
+    var t = $('toast');
+    t.textContent = text;
+    t.hidden = false;
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+
+  function post(fn, body, cb) {
+    var xhr = new XMLHttpRequest(), done = false;
+    function end(err, data) { if (!done) { done = true; cb(err, data); } }
+    try {
+      xhr.open('POST', API + '/rest/v1/rpc/' + fn, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + KEY);
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.timeout = 12000;
+      xhr.onload = function () {
+        var data = null;
+        try { data = JSON.parse(xhr.responseText); } catch (e) {}
+        if (xhr.status >= 200 && xhr.status < 300) { end(null, data); } else { end('http_' + xhr.status, data); }
+      };
+      xhr.onerror = function () { end('network', null); };
+      xhr.ontimeout = function () { end('timeout', null); };
+      xhr.send(JSON.stringify(body || {}));
+    } catch (e) { end('client', null); }
+  }
+
+  function load() {
+    $('allBody').innerHTML = '<tr><td colspan="8" class="empty">불러오는 중…</td></tr>';
+    post('game_record_list', {}, function (err, data) {
+      if (err || !data || !data.ok) {
+        $('summary').innerHTML = '<span style="color:#B42318"><b>기록을 불러오지 못했어요.</b> 인터넷을 확인한 뒤 새로고침을 눌러 주세요.</span>';
+        $('allBody').innerHTML = '<tr><td colspan="8" class="empty">불러오기 실패</td></tr>';
+        return;
+      }
+      rows = data.rows || [];
+      render();
+    });
+  }
+
+  function filtered() {
+    var g = $('fGame').value, gr = $('fGrade').value;
+    return rows.filter(function (r) {
+      if (g && r.game_id !== g) { return false; }
+      if (gr && String(r.grade) !== gr) { return false; }
+      return true;
+    });
+  }
+
+  function render() {
+    var list = filtered();
+    var people = {}, students = 0, i, r;
+    for (i = 0; i < list.length; i++) {
+      r = list[i];
+      var k = r.grade + '-' + r.student_num;
+      if (!people[k]) { people[k] = { grade: r.grade, num: r.student_num, name: r.student_name || '', n: 0, games: {} }; students += 1; }
+      people[k].n += 1;
+      if (r.student_name) { people[k].name = r.student_name; }
+      people[k].games[r.game_id] = 1;
+    }
+    var gi = {};
+    for (i = 0; i < list.length; i++) { gi[list[i].game_id] = (gi[list[i].game_id] || 0) + 1; }
+
+    $('summary').innerHTML =
+      '<span>참여한 친구 <b>' + students + '명</b></span>' +
+      '<span>남긴 기록 <b>' + list.length + '건</b></span>' +
+      '<span>게임 <b>' + Object.keys(gi).length + '가지</b></span>' +
+      '<span style="color:#8A94A3">불러온 시각 ' + when(Date.now()) + '</span>';
+
+    renderRanking(list);
+    renderAll(list);
+    renderTeacher();
+  }
+
+  function bestByStudent(list, gameId) {
+    var best = {}, i, r, k;
+    for (i = 0; i < list.length; i++) {
+      r = list[i];
+      if (gameId && r.game_id !== gameId) { continue; }
+      k = r.game_id + '|' + r.grade + '-' + r.student_num;
+      if (!best[k] || num(r.score) > num(best[k].score)) { best[k] = r; }
+    }
+    var out = [];
+    for (k in best) { if (best.hasOwnProperty(k)) { out.push(best[k]); } }
+    return out;
+  }
+
+  function renderRanking(list) {
+    var box = $('ranking'), html = '', i, g;
+    var chosen = $('fGame').value;
+    var games = chosen ? [gameOf(chosen)] : GAMES;
+    var any = false;
+
+    for (i = 0; i < games.length; i++) {
+      g = games[i];
+      var mine = list.filter(function (r) { return r.game_id === g.id; });
+      if (!mine.length) { continue; }
+      any = true;
+      var best = bestByStudent(mine, g.id);
+      best.sort(function (a, b) {
+        if (num(b.score) !== num(a.score)) { return num(b.score) - num(a.score); }
+        return num(a.created_at) - num(b.created_at);
+      });
+      var top = best.slice(0, 10);
+      html += '<div class="gamehead">' + g.icon + ' ' + esc(g.name) +
+              ' <span>참여 ' + best.length + '명 · 기록 ' + mine.length + '건</span></div>';
+      html += '<div class="tblwrap"><table><thead><tr><th>순위</th><th>학년</th><th>번호</th><th>이름</th><th>최고 ' +
+              (g.unit === '문제' ? '완료' : '점수') + '</th><th class="detail">기록</th></tr></thead><tbody>';
+      for (var j = 0; j < top.length; j++) {
+        var r = top[j], medal = j === 0 ? '🥇' : (j === 1 ? '🥈' : (j === 2 ? '🥉' : (j + 1)));
+        html += '<tr><td class="rank">' + medal + '</td>' +
+                '<td>' + r.grade + '</td>' +
+                '<td>' + r.student_num + '</td>' +
+                '<td class="name">' + (r.student_name ? esc(r.student_name) : '-') + '</td>' +
+                '<td><b>' + fmt(r.score) + '</b>' + (g.unit === '문제' ? '문제' : '점') + '</td>' +
+                '<td class="detail">' + esc(r.detail || '') + '</td></tr>';
+      }
+      html += '</tbody></table></div>';
+    }
+    if (!any) {
+      html = '<div class="tblwrap"><p class="empty">아직 이 조건에 맞는 기록이 없어요.<br>게임을 한 판 마치고 🏆 기록 남기기를 눌러 보세요!</p></div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function sortedAll(list) {
+    var out = list.slice();
+    if ($('fSort').value === 'rank') {
+      out.sort(function (a, b) {
+        if (num(b.score) !== num(a.score)) { return num(b.score) - num(a.score); }
+        return num(b.created_at) - num(a.created_at);
+      });
+    } else {
+      out.sort(function (a, b) { return num(b.created_at) - num(a.created_at); });
+    }
+    return out;
+  }
+
+  function renderAll(list) {
+    var body = $('allBody'), arr = sortedAll(list), i, r, html = '';
+    var showDel = !!pin;
+    var delHead = document.querySelector('th.delcol');
+    if (delHead) { delHead.hidden = !showDel; }
+    $('allCnt').textContent = list.length ? '(' + list.length + '건)' : '';
+    if (!arr.length) {
+      body.innerHTML = '<tr><td colspan="8" class="empty">아직 기록이 없어요.</td></tr>';
+      return;
+    }
+    for (i = 0; i < arr.length; i++) {
+      r = arr[i];
+      var g = gameOf(r.game_id);
+      html += '<tr>' +
+        '<td>' + when(r.created_at) + '</td>' +
+        '<td>' + g.icon + '</td>' +
+        '<td>' + r.grade + '</td>' +
+        '<td>' + r.student_num + '</td>' +
+        '<td class="name">' + (r.student_name ? esc(r.student_name) : '-') + '</td>' +
+        '<td><b>' + fmt(r.score) + '</b></td>' +
+        '<td class="detail">' + esc(r.detail || '') + '</td>' +
+        (showDel ? '<td><button class="del" data-id="' + r.id + '" type="button" aria-label="이 기록 지우기">✕</button></td>' : '') +
+        '</tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  function renderTeacher() {
+    var on = !!pin;
+    $('btnTeacher').textContent = on ? '🔓 선생님 모드' : '🔒 선생님';
+    $('btnClear').hidden = !on;
+    $('btnTeacher').onclick = function () {
+      if (pin) {
+        pin = '';
+        toast('선생님 모드를 끝냈어요');
+        render();
+        return;
+      }
+      $('pinInput').value = '';
+      $('pinMsg').textContent = '';
+      $('pinMask').hidden = false;
+      try { $('pinInput').focus(); } catch (e) {}
+    };
+  }
+
+  function csv() {
+    var arr = sortedAll(filtered());
+    if (!arr.length) { toast('내려받을 기록이 없어요'); return; }
+    var lines = ['학년,번호,이름,게임,점수,기록내용,소요시간(초),등록시각'];
+    function q(v) {
+      var s = String(v == null ? '' : v);
+      if (/[",\n\r]/.test(s)) { s = '"' + s.replace(/"/g, '""') + '"'; }
+      return s;
+    }
+    for (var i = 0; i < arr.length; i++) {
+      var r = arr[i];
+      var d = new Date(num(r.created_at));
+      var stamp = isNaN(d.getTime()) ? '' : (d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()));
+      lines.push([
+        r.grade, r.student_num, q(r.student_name || ''), q(gameOf(r.game_id).name),
+        num(r.score), q(r.detail || ''), (r.duration_sec == null ? '' : r.duration_sec), q(stamp)
+      ].join(','));
+    }
+    var blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    var url = URL.createObjectURL(blob);
+    var d2 = new Date();
+    a.href = url;
+    a.download = '왕전초_창의수학_기록_' + d2.getFullYear() + pad(d2.getMonth() + 1) + pad(d2.getDate()) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    toast('엑셀(CSV) 파일로 저장했어요');
+  }
+
+  function checkPin(value, cb) {
+    /* 없는 id(-1)로 삭제를 시도한다: PIN이 맞으면 not_found, 틀리면 bad_pin — 데이터는 그대로 */
+    post('game_record_delete', { p_pin: value, p_id: -1 }, function (err, data) {
+      if (err) { cb('net', null); return; }
+      if (data && data.ok) { cb('ok', data); return; }
+      if (data && data.error === 'not_found') { cb('ok', data); return; }
+      cb('bad', data);
+    });
+  }
+
+  function bind() {
+    $('btnReload').onclick = load;
+    $('btnCsv').onclick = csv;
+    $('fGame').onchange = render;
+    $('fGrade').onchange = render;
+    $('fSort').onchange = render;
+
+    $('pinCancel').onclick = function () { $('pinMask').hidden = true; };
+    $('pinMask').onclick = function (e) { if (e.target === $('pinMask')) { $('pinMask').hidden = true; } };
+    $('pinOk').onclick = function () {
+      var v = ($('pinInput').value || '').trim();
+      if (!v) { $('pinMsg').textContent = 'PIN을 입력해 주세요.'; return; }
+      $('pinMsg').textContent = '';
+      $('pinOk').disabled = true;
+      checkPin(v, function (res) {
+        $('pinOk').disabled = false;
+        if (res === 'ok') {
+          pin = v;
+          $('pinMask').hidden = true;
+          toast('선생님 모드 — 기록을 한 건씩 지울 수 있어요');
+          render();
+        } else if (res === 'net') {
+          $('pinMsg').textContent = '인터넷이 잠깐 끊겼어요. 다시 눌러 주세요.';
+        } else {
+          $('pinMsg').textContent = 'PIN이 맞지 않아요.';
+        }
+      });
+    };
+    $('pinInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); $('pinOk').click(); }
+    });
+
+    $('btnClear').onclick = function () {
+      if (!pin) { return; }
+      if (!window.confirm('기록을 전부 지울까요? 지운 기록은 되돌릴 수 없어요.')) { return; }
+      $('btnClear').disabled = true;
+      post('game_record_clear', { p_pin: pin }, function (err, data) {
+        $('btnClear').disabled = false;
+        if (!err && data && data.ok) {
+          toast(data.deleted + '건을 지웠어요');
+          load();
+        } else {
+          toast('지우지 못했어요. PIN을 다시 확인해 주세요.');
+        }
+      });
+    };
+
+    $('allBody').addEventListener('click', function (e) {
+      var t = e.target;
+      while (t && t !== $('allBody') && !(t.getAttribute && t.getAttribute('data-id'))) { t = t.parentNode; }
+      if (!t || t === $('allBody')) { return; }
+      var id = t.getAttribute('data-id');
+      if (!pin || !id) { return; }
+      if (!window.confirm('이 기록 한 건을 지울까요?')) { return; }
+      post('game_record_delete', { p_pin: pin, p_id: Number(id) }, function (err, data) {
+        if (!err && data && data.ok) {
+          toast('한 건을 지웠어요');
+          load();
+        } else {
+          toast('지우지 못했어요.');
+        }
+      });
+    });
+  }
+
+  bind();
+  load();
+})();
+</script>
+</body>
+</html>
