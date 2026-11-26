@@ -119,6 +119,7 @@ h1 .hh{color:#F0618F}
   overflow-wrap:break-word;
 }
 .desc{
+  display:block;
   margin:3px 0 0;
   font-size:12.8px;
   line-height:1.45;
@@ -176,6 +177,7 @@ h1 .hh{color:#F0618F}
 @media (min-width:640px){
   .wrap{padding-left:calc(22px + env(safe-area-inset-left));padding-right:calc(22px + env(safe-area-inset-right))}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .grid > li:last-child{grid-column:1 / -1}
   .card{align-items:flex-start;padding:17px}
   .icon{width:58px;height:58px;font-size:29px}
   .name{font-size:17.5px}
