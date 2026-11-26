@@ -1,46 +1,48 @@
-# 미니게임 모음 (games hub)
+# ♡왕전초 창의수학 놀이터!♡
 
-가족·아이들이 한 페이지에서 4가지 미니게임을 골라 바로 시작하는 모바일·태블릿용 허브 페이지입니다.
-빌드 도구 없이 **단일 `index.html`**(외부 리소스 0건)로 동작합니다.
+왕전초 친구들이 태블릿·스마트폰으로 바로 여는 창의수학 놀이 5가지와, 놀이가 끝나면 남기는 **학년·번호 기록장**입니다.
 
-- 배포 주소: <https://chohanui2-home.github.io/games/>
-- 저장소: `chohanui2-home/games` (public, `main` / `(root)` GitHub Pages)
-- 오프라인 사본: `dashboards/미니게임-모음.html` (`index.html`과 바이트·sha256 동일)
+- 놀이터(모음): <https://chohanui2-home.github.io/games/>
+- 기록장: <https://chohanui2-home.github.io/games/records.html>
+- QR카드: `downloads/qr-changui-math.png` (놀이터), `downloads/qr-timer.png` (도전!! 타이머왕♡ · 단독)
 
-## 포함된 게임 (4가지)
+## 놀이 5가지
 
-| 아이콘 | 제목 | 게임 방식 | 주소 |
-|---|---|---|---|
-| ✏️ | 한붓그리기 | 점을 이어 모든 선을 중복 없이 한 번에 다 잇기 | https://chohanui2-home.github.io/one-stroke/ |
-| 🧮 | ♡왕전초 연산왕!♡ | 1~6단계 사칙연산(+ − × ÷) 5문제 풀기 | https://chohanui2-home.github.io/wangjeon-math/ |
-| ⏱️ | ♡왕전초 타이머왕!♡ | 눈짐작으로 목표 초에 딱 맞춰 멈추기 | https://chohanui2-home.github.io/wangjeon-timer/ |
-| 🎨 | ♡왕전초 눈치왕!♡ | 적힌 글자·칠해진 색깔 헷갈리지 않고 고르기 | https://chohanui2-home.github.io/wangjeon-nunchi/ |
+| 놀이 | 주소 | 끝났을 때 남는 기록 |
+| --- | --- | --- |
+| 🧮 ♡왕전초 연산왕!♡ | <https://chohanui2-home.github.io/wangjeon-math/> | 점수 · 맞힌 문제 수 · 걸린 시간 |
+| 🌈 ♡왕전초 길찾기왕!♡ | <https://chohanui2-home.github.io/wangjeon-connect/> | 완료한 문제 수 (단계별) |
+| 🎨 ♡왕전초 눈치왕!♡ | <https://chohanui2-home.github.io/wangjeon-nunchi/> | 점수 · 정답 수 · 반응 시간 |
+| 🍎 ♡왕전초 사과게임왕!♡ | <https://chohanui2-home.github.io/apple-game/> | 점수 · 터뜨린 사과 · 120초 |
+| ✏️ ♡왕전초 한붓그리기왕!♡ | <https://chohanui2-home.github.io/one-stroke/> | 완료한 문제 수 (단계별) |
 
-이 모음에는 위 4가지만 넣습니다(사용자 지정). 점프왕(`wangjeon-jump`), 내가 정육왕(`samgyeop-cut`),
-내가 불판왕(`samgyeop-grill`)은 각자의 주소에서 따로 즐기고, `meat-cbt`(자격증 필기 공부용)도 제외합니다.
+별도 놀이: ⏱️ **도전!! 타이머왕♡** — <https://chohanui2-home.github.io/wangjeon-timer/> (5종 모음에는 넣지 않고 단독 QR로 씁니다. 기록은 같은 기록장에 모입니다.)
 
-## 화면 규칙
+## 기록 남기기 (게임 화면)
 
-- 상단 제목 `미니게임 모음` 한 줄 정중앙 + 부제 `하고 싶은 게임을 눌러 바로 시작해 보세요!`
-- 카드 전체가 링크(`<a href="...">`) — 아이콘·게임 이름·짧은 게임 방식·`바로 시작 →` 배지
-- 360~560px 1열, 600px 이상 2열 반응형 그리드 (아이콘 50~54px, 카드 전체가 터치 영역)
-- 차분한 라이트 톤: 바탕 `#F4F6F9`, 카드 `#FFFFFF`, 카드별 은은한 파스텔 칩
-- `env(safe-area-inset-*)` 적용, CSS에 `-webkit-text-stroke` 미사용
-- 확인 뷰포트: `390×844`, `360×740`, `768×1024` — 가로 넘침 0
+- 한 판이 끝나거나 한 단계를 다 풀면 결과 화면(길찾기왕·한붓그리기왕은 `🏆 기록` 버튼/단계 완성 알림)에 **🏆 기록 남기기** 칸이 나옵니다.
+- 입력은 **학년 · 번호**(필수)와 **이름**(선택, 비워도 등록됩니다). 반(class)은 쓰지 않습니다.
+- `등록`을 누르면 Supabase `game_records` 로 바로 보내고, 화면에 등록 완료가 뜹니다. 연습만 할 때는 등록하지 않고 `다시 하기`를 누르면 됩니다.
+- 공용 태블릿 원칙: 게임은 `localStorage`/`sessionStorage` 를 쓰지 않습니다. 새로고침하면 처음 상태로 돌아갑니다.
 
-## 검증
+## 기록장 (선생님)
 
-```bash
-python3 test_app.py
-```
+- 게임별·학년별 필터, 게임별 최고 기록 순위(학생별 최고 1건), 전체 기록 목록.
+- **엑셀(CSV) 저장** — UTF-8 BOM 을 붙여 한글이 깨지지 않습니다.
+- **선생님 모드**(PIN `2026`): 기록 한 건씩 삭제, 전체 비우기.
 
-검사 항목: HTML 구조/태그 균형, 제목·부제, 4개 카드의 제목·URL·설명·배지, 카드 순서,
-제외 게임(점프왕·정육왕·불판왕·meat-cbt) 링크 부재, `-webkit-text-stroke` 부재, safe-area 적용,
-600px 2열 미디어쿼리, 외부 리소스·JS·인라인 핸들러 0건, `dashboards/미니게임-모음.html`과의 바이트 동일성.
+## 구조
 
-## 배포 메모
+- `index.html` — 놀이터 모음 페이지
+- `records.html` — 기록장
+- `schema.sql` — Supabase 스키마(테이블 + RPC 4개). 이미 적용되어 있습니다.
+- `record-panel.css`, `record-panel.js` — 6개 게임에 똑같이 들어가는 기록 패널(원본)
+- `inject_record.py`, `patch_games.py`, `patch_builds.py` — 각 게임 템플릿/build.py 에 패널을 넣은 1회용 스크립트
+- `make_qr.py` — QR카드 2장 생성 + OpenCV 디코딩 검증
 
-`gh` 토큰이 없는 환경에서는 GitHub 웹 UI로 `index.html`·`README.md`를 업로드하고
-Settings → Pages에서 `main` / `(root)`를 활성화합니다. 업로드 후 파일 목록에 반영된 것을 확인한 뒤
-커밋해야 하며(너무 빨리 커밋하면 HTTP 400), 반영 후 실서버 본문의 sha256이 로컬과 같은지 확인합니다.
-기존 파일을 덮어쓸 때는 웹 업로드가 막히면 해당 파일을 먼저 삭제한 뒤 다시 업로드합니다.
+## 데이터
+
+- Supabase 프로젝트 `family-dashboard`(`hlqyzstixodeqywgfmvg`) · 테이블 `game_records`
+- 컬럼: `id, created_at, game_id, game_title, grade, student_num, student_name, score, detail, duration_sec`
+- RPC: `game_record_submit`(anon), `game_record_list`(anon), `game_record_delete`(PIN), `game_record_clear`(PIN)
+- 테이블은 RLS 로 직접 읽기/쓰기를 막고, RPC 만 열어 두었습니다.
