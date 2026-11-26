@@ -51,12 +51,28 @@ h1{margin:0;font-size:clamp(21px,5.6vw,27px);font-weight:900;letter-spacing:-.03
 }
 .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
 .field{display:flex;flex-direction:column;gap:3px;flex:1 1 130px;min-width:0}
-.field > span{font-size:10.5px;font-weight:900;color:#7A8494;letter-spacing:-.01em}
+.field.wide{flex:1 1 100%}
+.field > span,.field > label{font-size:10.5px;font-weight:900;color:#7A8494;letter-spacing:-.01em}
 select{
   width:100%;height:38px;padding:0 8px;border:1.5px solid #D9E1EC;border-radius:11px;background:#fff;
   font:inherit;font-size:13.5px;font-weight:800;color:#243040;-webkit-appearance:none;appearance:none;
 }
 select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.searchbox{position:relative;display:block}
+.searchbox input{
+  width:100%;height:38px;padding:0 38px 0 12px;border:1.5px solid #D9E1EC;border-radius:11px;background:#fff;
+  font:inherit;font-size:13.5px;font-weight:800;color:#243040;
+  -webkit-appearance:none;appearance:none;
+}
+.searchbox input::placeholder{color:#9AA4B2;font-weight:700}
+.searchbox input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.clr{
+  position:absolute;right:5px;top:50%;transform:translateY(-50%);
+  width:28px;height:28px;padding:0;border:0;border-radius:9px;background:#EEF2F8;color:#5C6878;
+  font:inherit;font-size:12px;font-weight:900;line-height:1;cursor:pointer;
+}
+.clr:active{background:#E1E8F2}
+.clr[hidden]{display:none}
 .btns{display:flex;gap:6px;flex-wrap:wrap}
 .btn{
   height:38px;padding:0 12px;border:1.5px solid #D9E1EC;border-radius:11px;background:#fff;
@@ -141,6 +157,13 @@ tr.me td.rank{color:#B45309}
 
   <section class="panel">
     <div class="filters">
+      <div class="field wide">
+        <label for="fQuery">찾기</label>
+        <span class="searchbox">
+          <input id="fQuery" type="text" inputmode="search" autocomplete="off" spellcheck="false" placeholder="이름 또는 번호 검색">
+          <button class="clr" id="btnQueryClear" type="button" aria-label="검색어 지우기" hidden>✕</button>
+        </span>
+      </div>
       <label class="field"><span>게임</span>
         <select id="fGame">
           <option value="">전체 게임</option>
@@ -163,10 +186,12 @@ tr.me td.rank{color:#B45309}
           <option value="6">6학년</option>
         </select>
       </label>
-      <label class="field"><span>찾기</span>
+      <label class="field"><span>정렬</span>
         <select id="fSort">
-          <option value="rank">순위 · 점수 높은 순</option>
-          <option value="recent">최근 등록 순</option>
+          <option value="recent">최신순</option>
+          <option value="score">점수 높은 순</option>
+          <option value="grade">학년·번호 순</option>
+          <option value="name">이름 순</option>
         </select>
       </label>
     </div>
@@ -294,17 +319,32 @@ tr.me td.rank{color:#B45309}
   }
 
   function filtered() {
-    var g = $('fGame').value, gr = $('fGrade').value;
+    var g = $('fGame').value, gr = $('fGrade').value, q = queryText();
     return rows.filter(function (r) {
       if (g && r.game_id !== g) { return false; }
       if (gr && String(r.grade) !== gr) { return false; }
-      return true;
+      return matchesQuery(r, q);
     });
+  }
+
+  function queryText() {
+    var el = $('fQuery');
+    return el ? String(el.value || '').trim().toLowerCase() : '';
+  }
+
+  /* 이름(student_name)나 번호(student_num)에 검색어가 들어 있으면 통과. '학년-번호' 형태도 받는다. */
+  function matchesQuery(r, q) {
+    if (!q) { return true; }
+    var name = String(r.student_name == null ? '' : r.student_name).toLowerCase();
+    if (name && name.indexOf(q) !== -1) { return true; }
+    if (String(r.student_num).indexOf(q) !== -1) { return true; }
+    if (String(r.grade) + '-' + String(r.student_num) === q) { return true; }
+    return false;
   }
 
   function render() {
     var list = filtered();
-    var people = {}, students = 0, i, r;
+    var people = {}, students = 0, i, r, q = queryText();
     for (i = 0; i < list.length; i++) {
       r = list[i];
       var k = r.grade + '-' + r.student_num;
@@ -320,6 +360,7 @@ tr.me td.rank{color:#B45309}
       '<span>참여한 친구 <b>' + students + '명</b></span>' +
       '<span>남긴 기록 <b>' + list.length + '건</b></span>' +
       '<span>게임 <b>' + Object.keys(gi).length + '가지</b></span>' +
+      (q ? '<span>🔍 ‘<b>' + esc(q) + '</b>’ 검색</span>' : '') +
       '<span style="color:#8A94A3">불러온 시각 ' + when(Date.now()) + '</span>';
 
     renderRanking(list);
@@ -378,16 +419,37 @@ tr.me td.rank{color:#B45309}
     box.innerHTML = html;
   }
 
+  function nameOf(r) { return String(r.student_name == null ? '' : r.student_name).trim(); }
+  function byNewest(a, b) { return num(b.created_at) - num(a.created_at); }
+  function byGradeNum(a, b) {
+    var d = num(a.grade) - num(b.grade);
+    if (d !== 0) { return d; }
+    d = num(a.student_num) - num(b.student_num);
+    if (d !== 0) { return d; }
+    return byNewest(a, b);
+  }
+  function byName(a, b) {
+    var x = nameOf(a), y = nameOf(b);
+    if (!x && !y) { return byGradeNum(a, b); }
+    if (!x) { return 1; }
+    if (!y) { return -1; }
+    var c;
+    try { c = x.localeCompare(y, 'ko'); } catch (e) { c = (x < y ? -1 : (x > y ? 1 : 0)); }
+    return c !== 0 ? c : byGradeNum(a, b);
+  }
+
+  /* fSort: recent(최신순) · score(점수 높은 순) · grade(학년·번호 순) · name(이름 순) */
   function sortedAll(list) {
-    var out = list.slice();
-    if ($('fSort').value === 'rank') {
-      out.sort(function (a, b) {
-        if (num(b.score) !== num(a.score)) { return num(b.score) - num(a.score); }
-        return num(b.created_at) - num(a.created_at);
-      });
-    } else {
-      out.sort(function (a, b) { return num(b.created_at) - num(a.created_at); });
-    }
+    var mode = $('fSort').value, out = list.slice();
+    out.sort(function (a, b) {
+      if (mode === 'score') {
+        var s = num(b.score) - num(a.score);
+        return s !== 0 ? s : byNewest(a, b);
+      }
+      if (mode === 'grade') { return byGradeNum(a, b); }
+      if (mode === 'name') { return byName(a, b); }
+      return byNewest(a, b);
+    });
     return out;
   }
 
@@ -398,7 +460,9 @@ tr.me td.rank{color:#B45309}
     if (delHead) { delHead.hidden = !showDel; }
     $('allCnt').textContent = list.length ? '(' + list.length + '건)' : '';
     if (!arr.length) {
-      body.innerHTML = '<tr><td colspan="8" class="empty">아직 기록이 없어요.</td></tr>';
+      var active = !!(queryText() || $('fGame').value || $('fGrade').value);
+      body.innerHTML = '<tr><td colspan="8" class="empty">' +
+        (active ? '조건에 맞는 기록이 없어요.' : '아직 기록이 없어요.') + '</td></tr>';
       return;
     }
     for (i = 0; i < arr.length; i++) {
@@ -477,12 +541,30 @@ tr.me td.rank{color:#B45309}
     });
   }
 
+  function onQuery() {
+    $('btnQueryClear').hidden = !String($('fQuery').value || '').length;
+    render();
+  }
+
+  function clearQuery() {
+    $('fQuery').value = '';
+    $('btnQueryClear').hidden = true;
+    render();
+    try { $('fQuery').focus(); } catch (e) {}
+  }
+
   function bind() {
     $('btnReload').onclick = load;
     $('btnCsv').onclick = csv;
     $('fGame').onchange = render;
     $('fGrade').onchange = render;
     $('fSort').onchange = render;
+    $('fQuery').oninput = onQuery;
+    $('fQuery').onchange = onQuery;
+    $('fQuery').onkeydown = function (e) {
+      if (e.key === 'Escape') { clearQuery(); }
+    };
+    $('btnQueryClear').onclick = clearQuery;
 
     $('pinCancel').onclick = function () { $('pinMask').hidden = true; };
     $('pinMask').onclick = function (e) { if (e.target === $('pinMask')) { $('pinMask').hidden = true; } };
